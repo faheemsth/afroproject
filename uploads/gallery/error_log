@@ -1,0 +1,2 @@
+[05-Jul-2023 12:51:04 Etc/UTC] PHP Warning:  fopen(/home/onamhamy/public_html/onlineedu/uploads/gallery/index.php): failed to open stream: No such file or directory in /home/onamhamy/public_html/onlineedu/uploads/gallery/index.php on line 361
+[05-Jul-2023 12:51:04 Etc/UTC] PHP Warning:  fclose() expects parameter 1 to be resource, bool given in /home/onamhamy/public_html/onlineedu/uploads/gallery/index.php on line 363

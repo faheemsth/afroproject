@@ -1,0 +1,109 @@
+
+@import url(//db.onlinewebfonts.com/c/f3258385782c4c96aa24fe8b5d5f9782?family=Old+English+Text+MT);
+
+@font-face {
+        font-family: 'Old English Text MT';
+        src: url('fonts/OldEnglishTextMT.woff2') format('woff2'),
+            url('fonts/OldEnglishTextMT.woff') format('woff'),
+            url('fonts/OldEnglishTextMT.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+}
+
+body {
+        font-size: 8px;
+}
+.logo {
+        float: left;
+        width: 150px;
+}
+
+.header-top h1 {
+        font-family: 'Old English Text MT';
+}
+
+.text-underline {
+        text-decoration: underline;
+        text-decoration-skip-ink: none;
+}
+
+.element-underline {
+        border-bottom: 2px solid black;
+}
+
+.text-bold {
+        font-weight: bold;
+}
+
+.text-start {
+        text-align: left !important;
+}
+
+.text-center {
+        text-align: center !important;
+}
+
+.text-end {
+        text-align: right !important;
+}
+
+.table-borders-darken {
+        border-color: black !important;
+}
+
+.subject-column {
+        text-align: left !important;
+}
+
+table {
+        caption-side: bottom;
+        border-collapse: collapse;
+        
+        width: 100%;
+}
+
+.table-2 {
+        font-size: 6px;
+        border: 2px black solid;
+}
+
+.table-2 td {
+        padding: 0px 10px !important;
+        text-align: center;
+        border: 2px solid black;
+        padding: 0px 0px;
+        font-size: 8px;
+}
+
+.table-2 th {
+        padding: 0px 10px !important;
+        text-align: center;
+        border: 2px solid black;
+        font-size: 8px;
+}
+
+
+
+.table-bordered > :not(caption) > * {
+        border-width: 3px 0;
+}
+
+.table-bordered > :not(caption) > * > * {
+        border-width: 0 3px;
+}
+
+ .text-overline-custom {
+        border-top: 2px black solid;
+ }
+
+ .w-15 {
+        width: 15% !important;
+ }
+
+ .barcode {
+        height: 50px;
+        width: 400px;
+        position: relative;
+        left: 125px;
+ }

@@ -1,0 +1,297 @@
+
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title"><i class="fa icon-invoice"></i> <?=$this->lang->line('panel_title')?></h3>
+
+       
+        <ol class="breadcrumb">
+            <li><a href="<?=base_url("dashboard/index")?>"><i class="fa fa-laptop"></i> <?=$this->lang->line('menu_dashboard')?></a></li>
+            <li class="active"><?=$this->lang->line('menu_invoice')?></li>
+        </ol>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-2">
+                <?php if(($siteinfos->school_year == $this->session->userdata('defaultschoolyearID')) || ($this->session->userdata('usertypeID') == 1) || ($this->session->userdata('usertypeID') == 5)) { /* ?>
+                    <?php if(permissionChecker('invoice_add')) { ?>
+                        <h5 class="page-header">
+                            <a href="<?php echo base_url('libraryfine/add') ?>">
+                                <i class="fa fa-plus"></i> 
+                                <?=$this->lang->line('add_title')?>
+                            </a>
+                        </h5>
+                    <?php } ?>
+                <?php */ } ?>
+                </div>
+                <div class="col-sm-2">
+                     <?php if(($siteinfos->school_year == $this->session->userdata('defaultschoolyearID')) || ($this->session->userdata('usertypeID') == 1) || ($this->session->userdata('usertypeID') == 5)) { ?>
+                        <?php if(permissionChecker('invoice_add')) { 
+                                // echo session_id(); 
+                                // if ($_GET['sessions'] == 'devv') {
+                                    ?>
+                                     <!-- <h5 class="page-header">
+                                        <a href="<?php echo base_url('libraryfine/add') ?>">
+                                            <i class="fa fa-plus"></i> 
+                                            <?=$this->lang->line('add_charges')?>
+                                        </a>
+                                    </h5> -->
+                                    <?php
+                                // }
+                            ?>
+                        <?php } ?>
+                     <?php } ?>
+                </div>
+                <div class="col-sm-8">
+                    <!-- <div class="col-sm-3">
+                        <label>Upload CPV</label>
+                        <input type="file" name="cpv">
+                    </div>
+                     <div class="col-sm-3">
+                        <label>Upload BPV</label>
+                        <input type="file" name="bpv">
+                    </div> -->
+                    <form method="post">
+                        <div class="col-sm-4 col-md-offset-5">
+                            <input type="text" class="form-control" name="searchInvoice">
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="submit" class="btn btn-success" value="Search">
+                        </div>
+                     </form>
+                </div>
+                <div id="hide-table">
+                      <!--id="example1"-->
+                    <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th><?=$this->lang->line('slno')?></th>
+                                <th><?=$this->lang->line('invoice_student')?></th>
+                                <th><?=$this->lang->line('invoice_classesID')?></th>
+                                <th><?=$this->lang->line('invoice_total')?></th>
+                                <th><?=$this->lang->line('invoice_discount')?></th>
+                                <th><?=$this->lang->line('invoice_fine')?></th>
+                                <th><?=$this->lang->line('invoice_subtotal');?></th>
+                                <th><?=$this->lang->line('invoice_paid')?></th>
+                                <!--<th><?=$this->lang->line('invoice_weaver')?></th>-->
+                                <!--<th><?=$this->lang->line('invoice_balance')?></th>-->
+                                <th><?=$this->lang->line('invoice_onlystatus')?></th>
+                                <th><?=$this->lang->line('invoice_date_from')?></th>
+                                <th><?=$this->lang->line('invoice_date_to')?></th>
+                                <?php if(permissionChecker('invoice_view') || permissionChecker('invoice_edit') || permissionChecker('invoice_delete')) { ?>
+                                    <th><?=$this->lang->line('action')?></th>
+                                <?php } ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                // echo '<pre>';
+                                // print_r($maininvoices);
+                                // echo '</pre>';
+
+                                if(customCompute($maininvoices)) {$i = 1; foreach($maininvoices as $maininvoice) { ?>
+                                <tr>
+                                    <td data-title="<?=$this->lang->line('slno')?>">
+                                        <?php echo $i; ?>
+                                    </td>
+
+                                    <td data-title="<?=$this->lang->line('invoice_student')?>">
+                                        <?php echo $maininvoice->srname; ?>
+                                    </td>
+
+                                     <td data-title="<?=$this->lang->line('invoice_classesID')?>">
+                                        <?php echo $maininvoice->srclasses; ?>
+                                    </td>
+
+                                    <td data-title="<?=$this->lang->line('invoice_total')?>">
+                                        <?php 
+                                         echo ceil($maininvoice->maininvoicetotal_fee);
+                                        // if(isset($grandtotalandpayment['totalamount'][$maininvoice->maininvoiceID])) { echo number_format($grandtotalandpayment['totalamount'][$maininvoice->maininvoiceID], 2); } else { echo '0.00'; } 
+                                        ?>
+                                    </td>
+                                    
+                                    <td data-title="<?=$this->lang->line('invoice_discount')?>">
+                                        <?php 
+                                             echo ceil($maininvoice->maininvoice_discount);
+                                        //   if(isset($grandtotalandpayment['totaldiscount'][$maininvoice->maininvoiceID])) { echo number_format($grandtotalandpayment['totaldiscount'][$maininvoice->maininvoiceID], 2); } else { echo '0.00'; } 
+                                           ?>
+                                    </td>
+                                    
+                                    <td data-title="<?=$this->lang->line('invoice_fine')?>">
+                                        <?php
+                                            // $today = date("Y-m-d");
+                                            // $today_time = strtotime($today);
+                                            // $check_dates = strtotime($maininvoice->maininvoicedue_date);
+                                            // if($check_dates < $today_time){
+                                            // 	$datediff =   ceil(($today_time - $check_dates)/86400);
+                                            // 	if($datediff < 31){
+                                            // 	    $final = $datediff * 100;    
+                                            // 	}else{
+                                            // 	    $final = 0;    
+                                            // 	}
+                                            // 	echo $final;
+                                            // }else{
+                                                $final = 0;
+                                            // 	echo '0.0';
+                                            // }
+                                            echo '0.0';
+                                        ?>
+                                    </td>
+                                    
+                                    <td data-title="<?=$this->lang->line('invoice_subtotal')?>">
+                                        <?php
+                                            $maininvoicenet_fee = $maininvoice->maininvoicenet_fee + $final;
+                                            echo ceil($maininvoicenet_fee);
+                                            // if(isset($grandtotalandpayment['grandtotal'][$maininvoice->maininvoiceID])) { 
+                                            //     if(isset($grandtotalandpayment['totalpayment'][$maininvoice->maininvoiceID])) { 
+                                            //         if(isset($grandtotalandpayment['totalweaver'][$maininvoice->maininvoiceID])) {
+                                            //             $paymentandweaver = ($grandtotalandpayment['totalpayment'][$maininvoice->maininvoiceID] + $grandtotalandpayment['totalweaver'][$maininvoice->maininvoiceID]);
+                                            //             echo number_format(((float)$grandtotalandpayment['grandtotal'][$maininvoice->maininvoiceID] - (float)$paymentandweaver), 2);
+                                            //         } else {
+                                            //             echo number_format(((float)$grandtotalandpayment['grandtotal'][$maininvoice->maininvoiceID] - (float)$grandtotalandpayment['totalpayment'][$maininvoice->maininvoiceID]), 2);
+                                            //         }
+                                            //     } else {
+                                            //         if(isset($grandtotalandpayment['totalweaver'][$maininvoice->maininvoiceID])) {
+                                            //             echo number_format(((float)$grandtotalandpayment['grandtotal'][$maininvoice->maininvoiceID] - (float)$grandtotalandpayment['totalweaver'][$maininvoice->maininvoiceID]), 2);
+                                            //         } else {
+                                            //             echo number_format((float)$grandtotalandpayment['grandtotal'][$maininvoice->maininvoiceID], 2);
+                                            //         }
+                                            //     }
+                                            // } else { 
+                                            //     echo '0.00'; 
+                                            // } 
+                                        ?>
+                                    </td>
+                                    
+                                    <td data-title="<?=$this->lang->line('invoice_paid')?>">
+                                        <?php if(isset($grandtotalandpayment['totalpayment'][$maininvoice->maininvoiceID])) { echo number_format($grandtotalandpayment['totalpayment'][$maininvoice->maininvoiceID], 2); } else { echo '0'; } ?>
+                                    </td>
+
+                                    <!--<td data-title="<?=$this->lang->line('invoice_weaver')?>">-->
+                                        <?php 
+                                            // if(isset($grandtotalandpayment['totalweaver'][$maininvoice->maininvoiceID])) { echo number_format($grandtotalandpayment['totalweaver'][$maininvoice->maininvoiceID], 2); } else { echo '0.00'; } 
+                                            ?>
+                                    <!--</td>-->
+
+                                    
+
+                                    <td data-title="<?=$this->lang->line('invoice_onlystatus')?>">
+                                        <?php 
+                                            $status = $maininvoice->maininvoicestatus;
+                                            $setButton = '';
+                                            if($status == 0) {
+                                                $status = $this->lang->line('invoice_notpaid');
+                                                $setButton = 'btn-danger';
+                                            } elseif($status == 1) {
+                                                $status = $this->lang->line('invoice_partially_paid');
+                                                $setButton = 'btn-warning';
+                                            } elseif($status == 2) {
+                                                $status = $this->lang->line('invoice_fully_paid');
+                                                $setButton = 'btn-success';
+                                            }
+
+                                            echo "<button class='btn ".$setButton." btn-xs'>".$status."</button>";
+                                        ?>
+                                    </td>
+
+                                    <td data-title="<?=$this->lang->line('invoice_date')?>">
+                                        <?php echo date("d M Y", strtotime($maininvoice->maininvoicedate)) ; ?>
+                                    </td>
+                                    
+                                    <td data-title="<?=$this->lang->line('invoice_date')?>">
+                                        <?php echo date("d M Y", strtotime($maininvoice->maininvoicedue_date)) ; ?>
+                                    </td>
+
+                                    <?php if(permissionChecker('invoice_view') || permissionChecker('invoice_edit') || permissionChecker('invoice_delete')) { ?>
+                                    <td data-title="<?=$this->lang->line('action')?>">
+                                        <?php echo btn_view('libraryfine/view/'.$maininvoice->maininvoiceID, $this->lang->line('view')) ?>
+                                        <?php if(($siteinfos->school_year == $this->session->userdata('defaultschoolyearID')) || ($this->session->userdata('usertypeID') == 1) || ($this->session->userdata('usertypeID') == 5)) { ?>
+                                            <?php if($maininvoice->maininvoicestatus != 1 && $maininvoice->maininvoicestatus != 2) { echo btn_edit('libraryfine/edit/'.$maininvoice->maininvoiceID, $this->lang->line('edit')); } ?>
+                                            <?php if($maininvoice->maininvoicestatus != 1 && $maininvoice->maininvoicestatus != 2) { echo btn_delete('libraryfine/delete/'.$maininvoice->maininvoiceID, $this->lang->line('delete')); } ?>
+                                        <?php } ?>
+                                        <?php if(permissionChecker('invoice_view')) { if($maininvoice->maininvoicestatus != 2) { echo btn_invoice('libraryfine/payment/'.$maininvoice->maininvoiceID, $this->lang->line('payment')); }} ?>
+                                        <?php 
+                                            if(permissionChecker('invoice_view')) { 
+                                                echo '<a href="#paymentlist" id="'.$maininvoice->maininvoiceID.'" class="btn btn-info btn-xs mrg getpaymentinfobtn" rel="tooltip" data-toggle="modal"><i class="fa fa-list-ul" data-toggle="tooltip" data-placement="top" data-original-title="'.$this->lang->line('invoice_view_payments').'"></i></a>';
+                                                 echo '<a href="student/view/'.$maininvoice->maininvoicestudentID.'/'.$maininvoice->maininvoiceclassesID.'#payment" class="btn btn-warning btn-xs mrg"><i class="fa fa-briefcase" data-toggle="tooltip"  data-placement="top" data-original-title="'.$this->lang->line('invoice_view_student').'"></i></a>';
+                                                 if ($maininvoice->maininvoice_status == 0) {
+                                                        echo '<a href="#" class="btn btn-danger btn-xs mrg"><i class="fa fa-eye-slash" data-toggle="tooltip"  data-placement="top" data-original-title="Inactive"></i></a>';
+                                                 }else{
+                                                         echo '<a href="#" class="btn btn-primary btn-xs mrg"><i class="fa fa-eye" data-toggle="tooltip"  data-placement="top" data-original-title="Active"></i></a>';
+                                                 }
+                                                 
+                                                // echo $maininvoice->maininvoice_status;
+                                            }
+                                        ?>
+
+                                    </td>
+                                    <?php } ?>
+                                </tr>
+                            <?php $i++; }} ?>
+                        </tbody>
+                    </table>
+                    <?php 
+                        if($this->session->userdata("usertypeID") != 3){
+                            echo $this->pagination->create_links(); 
+                        }
+                        
+                    ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="paymentlist">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title"><?=$this->lang->line('invoice_view_payments')?></h4>
+            </div>
+            <div class="modal-body">
+                <div id="hide-table">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th><?=$this->lang->line('slno')?></th>
+                                <th><?=$this->lang->line('invoice_date')?></th>
+                                <th><?=$this->lang->line('invoice_paidby')?></th>
+                                <th><?=$this->lang->line('invoice_paymentamount')?></th>
+                                <th><?=$this->lang->line('invoice_weaver')?></th>
+                                <th><?=$this->lang->line('invoice_fine')?></th>
+                                <th><?=$this->lang->line('action')?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="payment-list-body">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" style="margin-bottom:0px;" data-dismiss="modal"><?=$this->lang->line('close')?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.getpaymentinfobtn').click(function() {
+        var maininvoiceID =  $(this).attr('id');
+        if(maininvoiceID > 0) {
+            $.ajax({
+                type: 'POST',
+                url: "<?=base_url('libraryfine/paymentlist')?>",
+                data: {'maininvoiceID' : maininvoiceID},
+                dataType: "html",
+                success: function(data) {
+                    $('#payment-list-body').children().remove();
+                    $('#payment-list-body').append(data);
+                }
+            });
+        }   
+    });
+</script>

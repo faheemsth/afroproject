@@ -1,0 +1,3 @@
+mvc/cache/*
+mvc/config/development/*
+mvc/config/production/*

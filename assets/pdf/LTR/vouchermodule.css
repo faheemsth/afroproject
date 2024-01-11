@@ -1,0 +1,98 @@
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    /*max-width: 280px;*/
+}
+@media only print
+{
+    footer, header, .sidebar{ display:none; }
+} 
+<!--
+.c69 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 0.599pt;width: 900.9pt;border-collapse: collapse;}
+.c2 {height: 368.044pt;}
+.c3 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:25.074%;background-color: #ffffff;}
+.c62 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 7.45pt;width: 212.15pt;border-collapse: collapse;}
+.c4 {height: 38.69pt;}
+.c5 {width:68.748%;background-color: #ffffff;}
+.c6 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 4.549pt;}
+.c7 {width:31.251%;background-color: #ffffff;}
+.c8 {text-align: center;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 6.25pt;margin-right: 4.25pt;}
+.c9 {height: 12.15pt;}
+.c10 {width:100.0%;background-color: #ffffff;}
+.c11 {height: 10.75pt;}
+.c12 {text-align: center;line-height: 9.248pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.25pt;}
+.c13 {font-family: 'Verdana';font-size: 8.0pt;color: #000000;text-decoration: underline;}
+.c14 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.25pt;}
+.c15 {height: 9.248pt;}
+.c16 {line-height: 9.248pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.25pt;}
+.c17 {font-family: 'Verdana';font-size: 8.0pt;color: #0d0d0d;}
+.c18 {font-family: 'Verdana';font-size: 7.0pt;color: #000000;}
+.c19 {font-family: 'Verdana';font-size: 8.0pt;color: #000000;}
+.c20 {width:38.062%;background-color: #ffffff;}
+.c21 {line-height: 9.248pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 4.65pt;}
+.c22 {width:61.937%;background-color: #ffffff;}
+.c23 {line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 6.15pt;margin-right: 4.25pt;}
+.c24 {height: 8.25pt;}
+.c25 {border-bottom-width: 0.5pt;border-bottom-color: #000000;border-bottom-style: solid;width:100.0%;background-color: #ffffff;}
+.c26 {height: 14.65pt;}
+.c27 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:12.726%;background-color: #d9d9d9;}
+.c28 {text-align: center;line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.4pt;}
+.c29 {font-family: 'Verdana';font-size: 7.0pt;color: #000000;background-color: #d9d9d9;}
+.c30 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:18.972%;background-color: #d9d9d9;}
+.c31 {text-align: center;line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.15pt;}
+.c32 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:42.422%;background-color: #d9d9d9;}
+.c33 {text-align: center;line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.65pt;margin-right: 5.15pt;}
+.c34 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:25.877%;background-color: #d9d9d9;}
+.c35 {text-align: center;line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.649pt;margin-right: 4.25pt;}
+.c36 {height: 14.6pt;}
+.c37 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:12.726%;background-color: #ffffff;}
+.c38 {font-family: 'Calibri';font-size: 7.0pt;color: #000000;}
+.c39 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:18.972%;background-color: #ffffff;}
+.c40 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:42.422%;background-color: #ffffff;}
+.c41 {line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.65pt;margin-right: 5.15pt;}
+.c42 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:25.877%;background-color: #ffffff;}
+.c43 {height: 12.1pt;}
+.c44 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:74.122%;background-color: #ffffff;}
+.c45 {text-align: right;line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.15pt;}
+.c46 {border-top-width: 0.5pt;border-top-color: #000000;border-top-style: solid;width:100.0%;background-color: #ffffff;}
+.c47 {height: 49.708pt;}
+.c48 {font-family: 'Calibri';font-size: 8.0pt;color: #000000;}
+.c49 {margin-top: 0.0pt;margin-bottom: 0.0pt;}
+.c50 {line-height: 8.092pt;margin-top: 0.0pt;margin-bottom: 0.0pt;}
+.c51 {height: 40.0pt;}
+.c52 {text-align: center;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.25pt;}
+.c53 {height: 11.56pt;}
+.c54 {width:64.176%;background-color: #ffffff;}
+.c55 {line-height: 11.56pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 5.25pt;}
+.c56 {font-family: 'Calibri';font-size: 10.0pt;color: #000000;}
+.c57 {width:35.823%;background-color: #ffffff;}
+.c58 {text-align: right;line-height: 11.56pt;margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.55pt;margin-right: 5.25pt;}
+.c59 {height: 33.294pt;}
+.c60 {text-align: center;line-height: 13.294pt;margin-top: 0.0pt;margin-bottom: 10.0pt;margin-left: 5.4pt;margin-right: 5.25pt;}
+.c61 {font-family: 'Arial';font-size: 10.0pt;color: #000000;}
+.c63 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 5.4pt;margin-right: 4.5pt;}
+.c64 {border-width: 0.5pt;border-color: #000000;border-style: solid;width:24.975%;background-color: #ffffff;}
+.c65 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 6.3pt;margin-right: 6.549pt;width: 212.15pt;border-collapse: collapse;}
+.c66 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 6.3pt;margin-right: 4.5pt;}
+.c67 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 6.299pt;margin-right: 6.549pt;width: 212.15pt;border-collapse: collapse;}
+.c68 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 6.299pt;margin-right: 4.5pt;}
+.c76 {margin-top: 0.0pt;margin-bottom: 0.0pt;margin-left: 0.599pt;width: 900.9pt;border-collapse: collapse;}

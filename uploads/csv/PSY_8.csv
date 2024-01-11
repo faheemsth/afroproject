@@ -1,0 +1,8 @@
+type,passmark,finalmark,subject,subject_author,subject_code,teachers
+1,16,40,Internship,N/A,PSY-632  ,67
+1,32,80,Clinical Psychology-II ,N/A,PSY-604 ,68
+1,32,80,Counseling Psychology-II ,N/A,PSY-606 ,37
+1,32,80,Positive Psychology ,N/A,PSY-608 ,22
+1,32,80,Thesis ,N/A,PSY-630 ,68
+0,0,,Optional Subjects (any one from the following),,,
+1,32,80,Forensic psychology 1,,PSY-612 ,67

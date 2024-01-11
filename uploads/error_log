@@ -1,0 +1,22 @@
+[13-Jan-2023 00:52:34 UTC] PHP Deprecated:  Directive 'allow_url_include' is deprecated in Unknown on line 0
+[15-Jan-2023 06:48:26 UTC] PHP Deprecated:  Directive 'allow_url_include' is deprecated in Unknown on line 0
+[22-Jan-2023 13:35:14 UTC] PHP Deprecated:  Directive 'allow_url_include' is deprecated in Unknown on line 0
+[27-Jan-2023 15:22:30 UTC] PHP Deprecated:  Directive 'allow_url_include' is deprecated in Unknown on line 0
+[06-Feb-2023 21:59:40 UTC] PHP Deprecated:  Directive 'allow_url_include' is deprecated in Unknown on line 0
+[27-Feb-2023 10:14:27 Asia/Karachi] Exception ignored in shutdown function tool_log\log\manager::dispose: Error reading from database
+[27-Feb-2023 14:32:20 Asia/Karachi] Exception ignored in shutdown function tool_log\log\manager::dispose: Error reading from database
+[19-Mar-2023 18:32:01 Asia/Karachi] Exception ignored in shutdown function tool_log\log\manager::dispose: Error reading from database
+[19-Mar-2023 18:32:04 Asia/Karachi] Exception ignored in shutdown function tool_log\log\manager::dispose: Error reading from database
+[19-Mar-2023 18:33:11 Asia/Karachi] Exception ignored in shutdown function tool_log\log\manager::dispose: Error reading from database
+[19-Mar-2023 18:33:15 Asia/Karachi] Exception ignored in shutdown function tool_log\log\manager::dispose: Error reading from database
+[19-Mar-2023 18:33:54 Asia/Karachi] Exception ignored in shutdown function tool_log\log\manager::dispose: Error reading from database
+[12-Apr-2023 11:35:34 UTC] PHP Warning:  require_once(/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php): failed to open stream: No such file or directory in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 11:35:34 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 11:36:00 UTC] PHP Warning:  require_once(/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php): failed to open stream: No such file or directory in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 11:36:00 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 12:17:07 UTC] PHP Warning:  require_once(/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php): failed to open stream: No such file or directory in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 12:17:07 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 12:54:49 UTC] PHP Warning:  require_once(/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php): failed to open stream: No such file or directory in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 12:54:49 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 12:58:49 UTC] PHP Warning:  require_once(/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php): failed to open stream: No such file or directory in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65
+[12-Apr-2023 12:58:49 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/onamhamy/public_html/onlineedu/uploads/lib/phpminimumversionlib.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/onamhamy/public_html/onlineedu/uploads/install.php on line 65

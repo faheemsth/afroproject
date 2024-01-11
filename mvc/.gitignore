@@ -1,0 +1,4 @@
+###> Codiginiter/logs-cache ###
+/logs
+/cache
+.htaccess
