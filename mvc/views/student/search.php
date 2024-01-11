@@ -205,6 +205,7 @@
                                                                 <span class="onoffswitch-small-switch"></span>
                                                             </label>
                                                         </div>
+                                                        <input type="hidden" class="test">
                                                     </td>
                                                     <?php } ?>
                                                     <?php if(permissionChecker('student_edit') || permissionChecker('student_delete') || permissionChecker('student_view')) { ?>

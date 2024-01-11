@@ -157,6 +157,8 @@ class Attendanceoverviewreport extends Admin_Controller {
 					'srschoolyearID' => $this->session->userdata('defaultschoolyearID')
 				]);
 				$sections = $this->section_m->get_order_by_section(array('sectionID'=>$student->srsectionID));
+			}else{
+				$sections = $this->section_m->general_get_order_by_section(array('classesID' => $classesID));
 			}
 			
 			echo "<option value='0'>", $this->lang->line("attendanceoverviewreport_please_select"),"</option>";
@@ -213,6 +215,11 @@ class Attendanceoverviewreport extends Admin_Controller {
 				$students = $this->studentrelation_m->general_get_order_by_student(array('srclassesID' => $classesID,'srsectionID'=>$sectionID,'srschoolyearID' => $schoolyearID, 'studentID' => $this->session->userdata('loginuserID')));
 				foreach ($students as $student) {
 					echo "<option value=\"$student->srstudentID\" selected>".$student->srname."</option>";
+				}
+			}else{
+				$students = $this->studentrelation_m->general_get_order_by_student(array('srclassesID' => $classesID,'srsectionID'=>$sectionID,'srschoolyearID' => $schoolyearID));
+				foreach ($students as $student) {
+					echo "<option value=\"$student->srstudentID\">".$student->srname."</option>";
 				}
 			}
 		}
