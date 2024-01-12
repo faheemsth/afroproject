@@ -213,16 +213,21 @@ class Invoice extends Admin_Controller
             $this->data["allsection"]           = [];
 
             if ($_GET) {
+                
                 $classesID = $_GET["classesID"];
+                $arr = [];
+
                 if ($classesID != 0) {
                     $array["maininvoiceclassesID"]  = $classesID;
                     $this->data["classesID"]        = $classesID;
+                    $arr['classesID'] = $classesID;
                     $this->data["allsection"]       = $this->section_m->get_order_by_section(["classesID" => $classesID,]);
                 }
                 $sectionID = $_GET["sectionID"];
                 if ($sectionID != 0) {
                     $array["maininvoicesectionID"]  = $sectionID;
                     $this->data["sectionID"]        = $sectionID;
+                    $arr['sectionID'] = $sectionID;
                     $studentArrays = ["srclassesID" => $classesID];
                     if ((int) $sectionID) {
                         $studentArrays["srsectionID"]   = $sectionID;
@@ -233,6 +238,7 @@ class Invoice extends Admin_Controller
                 if ($studentID != 0) {
                     $array["maininvoicestudentID"]  = $studentID;
                     $this->data["studentID"]        = $studentID;
+                    $arr['invoice.studentID'] = $studentID;
                 }
                 $nameSearch = $_GET["nameSearch"];
                 if ($nameSearch != "") {
@@ -244,9 +250,10 @@ class Invoice extends Admin_Controller
 
 
                 if ($maininvoice_type_v != '0') {
-
                     $array["maininvoice_type_v"]        = $maininvoice_type_v;
                     $this->data["maininvoice_type_v"]   = $maininvoice_type_v;
+                    $arr['type_v'] = $maininvoice_type_v;
+
                 } else {
 
                     $this->data["maininvoice_type_v"]   = $maininvoice_type_v;
@@ -255,6 +262,8 @@ class Invoice extends Admin_Controller
                 if ($refrence_no != "") {
                     $array["refrence_no"]           = $refrence_no;
                     $this->data["refrence_no"]      = $refrence_no;
+                    $arr['refrence_no'] = $refrence_no;
+
                 }
                 $maininvoicestatus = $_GET["maininvoicestatus"];
                 if ($maininvoicestatus != "") {
@@ -270,12 +279,16 @@ class Invoice extends Admin_Controller
                 if ($invoice_status != 99) {
                     $array["invoice_status"]        = $invoice_status;
                     $this->data["invoice_status"]   = $invoice_status;
+                    $arr['invoice_status'] = $invoice_status;
                 } elseif ($invoice_status == 99) {
                     $this->data["invoice_status"]   = 99;
+                    $arr['invoice_status'] = $invoice_status;
                 } else {
                     $array["invoice_status"]        = 1;
                     $this->data["invoice_status"]   = 1;
+                    $arr['invoice_status'] = $invoice_status;
                 }
+               
                 $date_type      = $_GET["date_type"];
                 $start_date     = $_GET["start_date"];
                 $end_date       = $_GET["end_date"];
@@ -283,10 +296,14 @@ class Invoice extends Admin_Controller
                     if ($date_type == "maininvoicedate") {
                         $array["maininvoicedate >="] = date("Y-m-d", strtotime($start_date));
                         $array["maininvoicedate <="] = date("Y-m-d", strtotime($end_date));
+                        $arr["date >="] = date("Y-m-d", strtotime($start_date));
+						$arr["date <="] = date("Y-m-d", strtotime($end_date));
                     }
                     if ($date_type == "maininvoicedue_date") {
                         $array["maininvoicedue_date >="] = date("Y-m-d", strtotime($start_date));
                         $array["maininvoicedue_date <="] = date("Y-m-d", strtotime($end_date));
+                        $arr["due_date >="] = date("Y-m-d", strtotime($start_date));
+						$arr["due_date <="] = date("Y-m-d", strtotime($end_date));
                     }
 
                     $this->data["date_type"]    = $date_type;
@@ -311,33 +328,172 @@ class Invoice extends Admin_Controller
                         $array
                     );
 
+                    // echo "<pre>";
+                    // print_r($allinvoices);
+                    // die();
+
+                    // $header = array(
+                    //     lang("studentID"),
+                    //     lang("student_id"),
+                    //     lang("refrence_no"),
+                    //     lang("Accounts_Number"),
+                    //     lang("Name"),
+                    //     lang("GCUF"),
+                    // );
+
+
+
+                    //for opening balance
+                   // unset($array['maininvoiceclassesID']);
+                    // unset($array['maininvoicesectionID']);
+                    $invoice_test = $this->invoice_m->get_invoice_by_array_where_in($arr);
+                    $invoice_test1 = $this->invoice_m->get_invoice_by_array_where_in($arr);
+                    $this->data['totalAmountAndDiscount'] 	= $this->totalAmountAndDiscustomCompute($invoice_test,  $this->data["maininvoice_type_v"]);
+				    $this->data['totalAmountAndDiscount1'] 	= $this->totalAmountAndDiscustomCompute($invoice_test1,  $this->data["maininvoice_type_v"]);
+
+
+
                     $header = array(
-                        lang("studentID"),
-                        lang("student_id"),
-                        lang("refrence_no"),
-                        lang("Accounts_Number"),
-                        lang("Name"),
-                        lang("GCUF"),
+                        "Name",
+                        "Father Name",
+                        "CNIC",
+                        "Registration No",
+                        "Roll",
+                        "Degree",
+                        "Semester",
+                        "Semester Net Fee",
+                        "Type Of Fee",
+                        "Opening Balance",
+                        "Invoice",
+                        "Student Discount",
+                        "Weaver/Adjustment",
+                        "Other Charge",
+                        "Invoice Discount",
+                        "Total",
+                        "Total Discount",
+                        "Net Total",
+                        "Paid",
+                        "Balance",
+                        "Status"
                     );
+                    // $weaverandfines = $this->weaverandfine_m->get_order_by_weaverandfine(array('schoolyearID' => $schoolyearID, 'studentID' => $studentInfo->srstudentID));
+                    $parents = pluck($this->parents_m->get_parents(), 'name' ,'parentsID');
+                    $classes = pluck($this->classes_m->get_classes(), 'classes', 'classesID');
+                    $sections = pluck($this->section_m->general_get_order_by_section(), 'section', 'sectionID');
+                  //  $weaver   = pluck()
 
-
-
+                    $student_status = get_student_status_type();
+                    
                     $download_arr   =   [];
                     $sr     =   1;
                     $i      =   0;
                     $studentArray   =   [];
                     foreach ($allinvoices as $inv) {
 
+                        $weaver = $this->weaverandfine_m->get_sum_weaverandfine('weaver', ['studentID' => $inv->srstudentID, 'invoiceID' => $inv->invoiceID]);
+                        $payments = $this->payment_m->get_order_by_payment(array('studentID' => $inv->srstudentID));
+                        $allpaymentbyinvoice =  $this->allPaymentByInvoice($payments);
+
+
+                        $st_amount1      =   0;
+						$st_discount1    =   0;
+                        $typetotal = [];
+
+						if (isset($totalAmountAndDiscount[$inv->studentID]['total_paid'])) {
+							$total_paid1     =   $totalAmountAndDiscount[$inv->studentID]['total_paid'];
+						} else {
+							$total_paid1     =   0;
+						}
+                        if (isset($totalAmountAndDiscount1[$inv->studentID]['type_amount'][$inv->maininvoice_type_v])) {
+                            $st_amount1    += $totalAmountAndDiscount1[$inv->studentID]['type_amount'][$inv->maininvoice_type_v];
+                        }
+                        if (isset($totalAmountAndDiscount1[$inv->studentID]['type_discount'][$inv->maininvoice_type_v])) {
+                            $st_discount1    += $totalAmountAndDiscount1[$inv->studentID]['type_discount'][$inv->maininvoice_type_v];
+                        }
+                        $net_amount1 = $st_amount1 - $st_discount1;
+                        $balance1        =  $net_amount1 - $total_paid1;
+                        ////////Opening Close
+
+
+
+                        $st_amount      =   0;
+						$st_discount    =   0;
+						if (isset($totalAmountAndDiscount[$inv->studentID]['total_paid'])) {
+							$total_paid     =   $totalAmountAndDiscount[$inv->studentID]['total_paid'];
+						} else {
+							$total_paid     =   0;
+						}
+						if (isset($totalAmountAndDiscount[$inv->studentID]['type_amount'][$inv->maininvoice_type_v])) {
+                            $st_amount    += $totalAmountAndDiscount[$inv->studentID]['type_amount'][$inv->maininvoice_type_v];
+                        }
+                        if (isset($totalAmountAndDiscount[$inv->studentID]['type_discount'][$inv->maininvoice_type_v])) {
+                            $st_discount    += $totalAmountAndDiscount[$inv->studentID]['type_discount'][$inv->maininvoice_type_v];
+                         }
+                        $net_amount 				= 	$st_amount - $st_discount;
+                        $balance        			=  	$net_amount - $total_paid;
+
+
+
+
+
+
+                        
+
+
+
+
+
+
+
+                        // echo "<pre>";
+                        // print_r();
+                        // die();
+
+                        // $down   =   array(
+                        //     'studentID' => $inv->studentID,
+                        //     'refrence_no' => $inv->refrence_no,
+                        //     'student_id' => $inv->student_id,
+                        //     'Accounts_Number' => $inv->accounts_reg,
+                        //     'Name' => $inv->srname,
+                        //     'GCUF' => $inv->registerNO,
+
+                        // );
+
+
+
                         $down   =   array(
-                            'studentID' => $inv->studentID,
-                            'refrence_no' => $inv->refrence_no,
-                            'student_id' => $inv->student_id,
-                            'Accounts_Number' => $inv->accounts_reg,
                             'Name' => $inv->srname,
-                            'GCUF' => $inv->registerNO,
-
+                            'father_name' => isset($parents[$inv->parentID]) ? $parents[$inv->parentID] : '',
+                            'cnic_no' => $inv->cnic,
+                            'registration_no' => $inv->registerNO,
+                            'roll_no' => $inv->roll,
+                            'class_id' => isset($classes[$inv->srclassesID]) ? $classes[$inv->srclassesID] : '',
+                            'section_id' => isset($sections[$inv->srsectionID]) ? $sections[$inv->srsectionID] : '',
+                            'semester_net_fee' => $inv->total_fee,
+                            'invoice_type' => $inv->maininvoice_type_v == 'invoice' ? 'Tuition Fee' : $inv->maininvoice_type_v,
+                            'opening_balance' => $balance1,
+                            'invoice' => $inv->maininvoicenet_fee,
+                            'student_discount' => $inv->discount,
+                            'weaver' => $weaver->weaver == '' ? 0 : $weaver->weaver,
+                            'other_charges' => 0,
+                            'invoice_discount' => $inv->maininvoice_discount,
+                            'total' => $inv->maininvoicetotal_fee,
+                            'total_discount' => $inv->maininvoice_discount,
+                            'net_total' => $inv->maininvoicenet_fee,
+                            'paid' => $total_paid,
+                            'balance' => $balance,
+                            'student_status' => isset($student_status[$inv->active]) ?$student_status[$inv->active] : ''
+                            
+                            // 'studentID' => $inv->studentID,
+                            // 'refrence_no' => $inv->refrence_no,
+                            // 'student_id' => $inv->student_id,
+                            // 'Accounts_Number' => $inv->accounts_reg,
+                            // 'GCUF' => $inv->registerNO,
                         );
-
+                        //isset($allpaymentbyinvoice[$inv->invoiceID]) ? $allpaymentbyinvoice[$inv->invoiceID] : 0,
+                        // echo "<pre>";
+                        // print_r($down);
+                        // die();
                         $i++;
                         $studentArray[$i]   =  $down;
 
@@ -346,9 +502,11 @@ class Invoice extends Admin_Controller
                         $sr++;
                     }
 
+                    
 
 
                     helper_xlsx('invoice_number_report', $header, $studentArray);
+                    
                     $this->data["maininvoices"] = [];
                 } else {
 
@@ -359,6 +517,7 @@ class Invoice extends Admin_Controller
                         "data",
                         $array
                     );
+
                     //echo $this->db->last_query();
 
                 }
@@ -376,6 +535,77 @@ class Invoice extends Admin_Controller
             $this->load->view("_layout_main", $this->data);
         }
     }
+
+    private function totalAmountAndDiscustomCompute($arrays, $inv_types = array('invoice'))
+	{
+		error_reporting(0);
+		$totalAmountAndDiscount = [];
+		if (customCompute($arrays)) {
+			foreach ($arrays as $key => $array) {
+
+				if (isset($totalAmountAndDiscount[$array->studentID]['totalfine'])) {
+					$totalAmountAndDiscount[$array->studentID]['totalfine'] += $array->totalfine;
+				} else {
+					$totalAmountAndDiscount[$array->studentID]['totalfine'] = $array->totalfine;
+				}
+
+				if (isset($totalAmountAndDiscount[$array->studentID]['amount'])) {
+					$totalAmountAndDiscount[$array->studentID]['amount'] += $array->amount;
+				} else {
+					$totalAmountAndDiscount[$array->studentID]['amount'] = $array->amount;
+				}
+
+				if (isset($totalAmountAndDiscount[$array->studentID]['total_paid'])) {
+					$total_paid = ($array->total_paid);
+					$totalAmountAndDiscount[$array->studentID]['total_paid'] += $total_paid;
+				} else {
+					$total_paid = ($array->total_paid);
+					$totalAmountAndDiscount[$array->studentID]['total_paid'] = $total_paid;
+				}
+
+				foreach ($inv_types as $type) {
+
+
+
+					if (isset($totalAmountAndDiscount[$array->studentID]['type_v'][$type])) {
+						if ($totalAmountAndDiscount[$array->studentID]['type_v'][$array->type_v] == $type) {
+							$other_charges = ($array->amount);
+							$totalAmountAndDiscount[$array->studentID]['type_amount'][$type] 		+= 	$other_charges;
+							$discount = ($array->discount);
+							$totalAmountAndDiscount[$array->studentID]['type_discount'][$type] 	+= 	$discount;
+							$totalAmountAndDiscount[$array->studentID]['feetype'] 				= 	$array->feetype;
+						}
+					} else {
+						if ($array->type_v == $type) {
+							$other_charges = ($array->amount);
+							$totalAmountAndDiscount[$array->studentID]['type_amount'][$type] 		= 	$other_charges;
+							$discount = ($array->discount);
+							$totalAmountAndDiscount[$array->studentID]['type_discount'][$type] 	= 	$discount;
+							$totalAmountAndDiscount[$array->studentID]['feetype'] 				= 	$array->feetype;
+							$totalAmountAndDiscount[$array->studentID]['type_v'][$type] 		= 	$array->type_v;
+						}
+					}
+				}
+			}
+		}
+		return $totalAmountAndDiscount;
+	}
+
+
+    private function allPaymentByInvoice($payments)
+	{
+		$retPaymentArr = [];
+		if ($payments) {
+			foreach ($payments as $payment) {
+				if (isset($retPaymentArr[$payment->invoiceID])) {
+					$retPaymentArr[$payment->invoiceID] += $payment->paymentamount;
+				} else {
+					$retPaymentArr[$payment->invoiceID] = $payment->paymentamount;
+				}
+			}
+		}
+		return $retPaymentArr;
+	}
 
     public function processolinvoice()
     {

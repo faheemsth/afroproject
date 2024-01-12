@@ -69,6 +69,13 @@ class Weaverandfine_m extends MY_Model {
 		$query = parent::get_where_sum($clmn, $wherein, $arrays, $groupbyID);
 		return $query;
 	}
+
+	public function total_weaver($invoiceID){
+		$this->db->select('invoiceID, SUM(weaver) as total_weaver');
+		$this->db->from('weaverandfine');
+		$this->db->where('invoiceID', $invoiceID);
+		$query = $this->db->get();
+	}
 }
 
 /* End of file holiday_m.php */

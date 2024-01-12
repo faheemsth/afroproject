@@ -110,6 +110,15 @@
                      ?>
                     
                 </div> 
+
+                <div class="form-group col-sm-4">
+                    <label>Student Status</span></label>
+                    <?php
+                        $array = get_student_status_type();
+                         
+                        echo form_dropdown("student_status", $array, set_value("active", $student_status), "id='active' class='form-control select2'");
+                     ?>
+                </div>
                 <div class="form-group col-sm-4"  >
                     <label>Date Type</label>
 
@@ -118,7 +127,7 @@
                     <?php
                         $date_type_ar = array(
                                         
-                                        ""                      => 'All',
+                                        "0"                      => 'All',
                                         "maininvoicedate"       => 'Invoice Create Date',
                                         "maininvoicedue_date"   => 'Invoice Due Date',  
                                         "paymentdate"           => 'Payment Date',  
@@ -133,7 +142,7 @@
 
                     
 
-                    <input type="text" id="start_date" required name="start_date" value="<?php echo set_value('start_date',$start_date);?>" class="form-control datepicker"/>
+                    <input type="text" id="start_date" name="start_date" value="<?php echo set_value('start_date',$start_date);?>" class="form-control datepicker"/>
                     
                 </div>
                 <div class="form-group col-sm-4"  >
@@ -141,7 +150,7 @@
 
                     
 
-                    <input type="text" id="end_date" required name="end_date" value="<?php echo set_value('end_date',$end_date);?>" class="form-control datepicker"/>
+                    <input type="text" id="end_date" name="end_date" value="<?php echo set_value('end_date',$end_date);?>" class="form-control datepicker"/>
                     
                 </div>
 

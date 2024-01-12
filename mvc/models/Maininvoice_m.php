@@ -123,10 +123,11 @@ class Maininvoice_m extends MY_Model {
     public function get_maininvoice_with_studentrelation_by_array($page, $segment,$schoolyearID = NULL,$type = 'data',$array = array()) {
     	if ($type=='data') {
     		
-		$this->db->select('invoice.totalfine,invoice.studentID,student_id,student_id,accounts_reg,registerNO,refrence_no,maininvoicestudentID,srname,srclasses,maininvoicesectionID,srsectionID,srclassesID,balance,no_installment,maininvoicetotal_fee,maininvoice_discount,maininvoicenet_fee,maininvoice.maininvoiceID,maininvoicedate,maininvoicedue_date,maininvoice_status,maininvoicestatus,maininvoiceclassesID');
-    	}else{
+		//$this->db->select('invoice.totalfine,invoice.studentID,student_id,student_id,accounts_reg,registerNO,refrence_no,maininvoicestudentID,srname,srclasses,maininvoicesectionID,srsectionID,srclassesID,balance,no_installment,maininvoicetotal_fee,maininvoice_discount,maininvoicenet_fee,maininvoice.maininvoiceID,maininvoicedate,maininvoicedue_date,maininvoice_status,maininvoicestatus,maininvoiceclassesID');
+    	$this->db->select('*');
+		}else{
 
-		$this->db->select('maininvoice.maininvoiceID');	
+	    	$this->db->select('maininvoice.maininvoiceID');	
     	}
 		$this->db->from($this->_table_name);
 		$this->db->join('studentrelation', 'studentrelation.srstudentID = maininvoice.maininvoicestudentID', 'LEFT');
