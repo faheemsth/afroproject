@@ -588,7 +588,7 @@ public function get_invoice_or_where_by_array($where=NULL,$or_where=NULL){
 	
 
 	public function get_invoice_by_array_where_in($queryArray) {
-		$this->db->select('invoice.studentID,amount,discount,type_v,feetype, SUM(payment.paymentamount) as total_paid ');
+		$this->db->select('invoice.studentID,amount,discount,type_v,feetype, SUM(payment.paymentamount) as total_paid, invoice.invoiceID as invoiceID ');
 		$this->db->from('invoice');
 
 		$this->db->join('payment','invoice.invoiceID=payment.invoiceID','LEFT');

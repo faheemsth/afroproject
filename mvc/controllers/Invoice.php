@@ -216,11 +216,13 @@ class Invoice extends Admin_Controller
                 
                 $classesID = $_GET["classesID"];
                 $arr = [];
+                $arr1 = [];
 
                 if ($classesID != 0) {
                     $array["maininvoiceclassesID"]  = $classesID;
                     $this->data["classesID"]        = $classesID;
                     $arr['classesID'] = $classesID;
+                    $arr1['classesID'] = $classesID;
                     $this->data["allsection"]       = $this->section_m->get_order_by_section(["classesID" => $classesID,]);
                 }
                 $sectionID = $_GET["sectionID"];
@@ -228,6 +230,7 @@ class Invoice extends Admin_Controller
                     $array["maininvoicesectionID"]  = $sectionID;
                     $this->data["sectionID"]        = $sectionID;
                     $arr['sectionID'] = $sectionID;
+                    $arr1['sectionID'] = $sectionID;
                     $studentArrays = ["srclassesID" => $classesID];
                     if ((int) $sectionID) {
                         $studentArrays["srsectionID"]   = $sectionID;
@@ -239,6 +242,7 @@ class Invoice extends Admin_Controller
                     $array["maininvoicestudentID"]  = $studentID;
                     $this->data["studentID"]        = $studentID;
                     $arr['invoice.studentID'] = $studentID;
+                    $arr1['invoice.studentID'] = $studentID;
                 }
                 $nameSearch = $_GET["nameSearch"];
                 if ($nameSearch != "") {
@@ -253,6 +257,7 @@ class Invoice extends Admin_Controller
                     $array["maininvoice_type_v"]        = $maininvoice_type_v;
                     $this->data["maininvoice_type_v"]   = $maininvoice_type_v;
                     $arr['type_v'] = $maininvoice_type_v;
+                    $arr1['type_v'] = $maininvoice_type_v;
 
                 } else {
 
@@ -263,6 +268,7 @@ class Invoice extends Admin_Controller
                     $array["refrence_no"]           = $refrence_no;
                     $this->data["refrence_no"]      = $refrence_no;
                     $arr['refrence_no'] = $refrence_no;
+                    $arr1['refrence_no'] = $refrence_no;
 
                 }
                 $maininvoicestatus = $_GET["maininvoicestatus"];
@@ -280,13 +286,16 @@ class Invoice extends Admin_Controller
                     $array["invoice_status"]        = $invoice_status;
                     $this->data["invoice_status"]   = $invoice_status;
                     $arr['invoice_status'] = $invoice_status;
+                    $arr1['invoice_status'] = $invoice_status;
                 } elseif ($invoice_status == 99) {
                     $this->data["invoice_status"]   = 99;
                     $arr['invoice_status'] = $invoice_status;
+                    $arr1['invoice_status'] = $invoice_status;
                 } else {
                     $array["invoice_status"]        = 1;
                     $this->data["invoice_status"]   = 1;
                     $arr['invoice_status'] = $invoice_status;
+                    $arr1['invoice_status'] = $invoice_status;
                 }
                
                 $date_type      = $_GET["date_type"];
@@ -296,14 +305,18 @@ class Invoice extends Admin_Controller
                     if ($date_type == "maininvoicedate") {
                         $array["maininvoicedate >="] = date("Y-m-d", strtotime($start_date));
                         $array["maininvoicedate <="] = date("Y-m-d", strtotime($end_date));
+                        
                         $arr["date >="] = date("Y-m-d", strtotime($start_date));
 						$arr["date <="] = date("Y-m-d", strtotime($end_date));
+						$arr1["date <"] = date("Y-m-d", strtotime($start_date));
                     }
                     if ($date_type == "maininvoicedue_date") {
                         $array["maininvoicedue_date >="] = date("Y-m-d", strtotime($start_date));
                         $array["maininvoicedue_date <="] = date("Y-m-d", strtotime($end_date));
-                        $arr["due_date >="] = date("Y-m-d", strtotime($start_date));
-						$arr["due_date <="] = date("Y-m-d", strtotime($end_date));
+                       
+                        $arr["date >="] = date("Y-m-d", strtotime($start_date));
+						$arr["date <="] = date("Y-m-d", strtotime($end_date));
+						$arr1["date <"] = date("Y-m-d", strtotime($start_date));
                     }
 
                     $this->data["date_type"]    = $date_type;
@@ -315,6 +328,7 @@ class Invoice extends Admin_Controller
                 $this->data["count"] = $count;
                 // var_dump($count);
                 $returns = $this->paginationCompress("invoice/", $count, 10);
+                
 
 
 
@@ -328,182 +342,34 @@ class Invoice extends Admin_Controller
                         $array
                     );
 
-                    // echo "<pre>";
-                    // print_r($allinvoices);
-                    // die();
-
-                    // $header = array(
-                    //     lang("studentID"),
-                    //     lang("student_id"),
-                    //     lang("refrence_no"),
-                    //     lang("Accounts_Number"),
-                    //     lang("Name"),
-                    //     lang("GCUF"),
-                    // );
-
-
-
-                    //for opening balance
-                   // unset($array['maininvoiceclassesID']);
-                    // unset($array['maininvoicesectionID']);
-                    $invoice_test = $this->invoice_m->get_invoice_by_array_where_in($arr);
-                    $invoice_test1 = $this->invoice_m->get_invoice_by_array_where_in($arr);
-                    $this->data['totalAmountAndDiscount'] 	= $this->totalAmountAndDiscustomCompute($invoice_test,  $this->data["maininvoice_type_v"]);
-				    $this->data['totalAmountAndDiscount1'] 	= $this->totalAmountAndDiscustomCompute($invoice_test1,  $this->data["maininvoice_type_v"]);
-
-
-
                     $header = array(
-                        "Name",
-                        "Father Name",
-                        "CNIC",
-                        "Registration No",
-                        "Roll",
-                        "Degree",
-                        "Semester",
-                        "Semester Net Fee",
-                        "Type Of Fee",
-                        "Opening Balance",
-                        "Invoice",
-                        "Student Discount",
-                        "Weaver/Adjustment",
-                        "Other Charge",
-                        "Invoice Discount",
-                        "Total",
-                        "Total Discount",
-                        "Net Total",
-                        "Paid",
-                        "Balance",
-                        "Status"
+                        lang("studentID"),
+                        lang("student_id"),
+                        lang("refrence_no"),
+                        lang("Accounts_Number"),
+                        lang("Name"),
+                        lang("GCUF"),
                     );
-                    // $weaverandfines = $this->weaverandfine_m->get_order_by_weaverandfine(array('schoolyearID' => $schoolyearID, 'studentID' => $studentInfo->srstudentID));
-                    $parents = pluck($this->parents_m->get_parents(), 'name' ,'parentsID');
-                    $classes = pluck($this->classes_m->get_classes(), 'classes', 'classesID');
-                    $sections = pluck($this->section_m->general_get_order_by_section(), 'section', 'sectionID');
-                  //  $weaver   = pluck()
-
-                    $student_status = get_student_status_type();
-                    
+                   
                     $download_arr   =   [];
                     $sr     =   1;
                     $i      =   0;
                     $studentArray   =   [];
                     foreach ($allinvoices as $inv) {
-
-                        $weaver = $this->weaverandfine_m->get_sum_weaverandfine('weaver', ['studentID' => $inv->srstudentID, 'invoiceID' => $inv->invoiceID]);
-                        $payments = $this->payment_m->get_order_by_payment(array('studentID' => $inv->srstudentID));
-                        $allpaymentbyinvoice =  $this->allPaymentByInvoice($payments);
-
-
-                        $st_amount1      =   0;
-						$st_discount1    =   0;
-                        $typetotal = [];
-
-						if (isset($totalAmountAndDiscount[$inv->studentID]['total_paid'])) {
-							$total_paid1     =   $totalAmountAndDiscount[$inv->studentID]['total_paid'];
-						} else {
-							$total_paid1     =   0;
-						}
-                        if (isset($totalAmountAndDiscount1[$inv->studentID]['type_amount'][$inv->maininvoice_type_v])) {
-                            $st_amount1    += $totalAmountAndDiscount1[$inv->studentID]['type_amount'][$inv->maininvoice_type_v];
-                        }
-                        if (isset($totalAmountAndDiscount1[$inv->studentID]['type_discount'][$inv->maininvoice_type_v])) {
-                            $st_discount1    += $totalAmountAndDiscount1[$inv->studentID]['type_discount'][$inv->maininvoice_type_v];
-                        }
-                        $net_amount1 = $st_amount1 - $st_discount1;
-                        $balance1        =  $net_amount1 - $total_paid1;
-                        ////////Opening Close
-
-
-
-                        $st_amount      =   0;
-						$st_discount    =   0;
-						if (isset($totalAmountAndDiscount[$inv->studentID]['total_paid'])) {
-							$total_paid     =   $totalAmountAndDiscount[$inv->studentID]['total_paid'];
-						} else {
-							$total_paid     =   0;
-						}
-						if (isset($totalAmountAndDiscount[$inv->studentID]['type_amount'][$inv->maininvoice_type_v])) {
-                            $st_amount    += $totalAmountAndDiscount[$inv->studentID]['type_amount'][$inv->maininvoice_type_v];
-                        }
-                        if (isset($totalAmountAndDiscount[$inv->studentID]['type_discount'][$inv->maininvoice_type_v])) {
-                            $st_discount    += $totalAmountAndDiscount[$inv->studentID]['type_discount'][$inv->maininvoice_type_v];
-                         }
-                        $net_amount 				= 	$st_amount - $st_discount;
-                        $balance        			=  	$net_amount - $total_paid;
-
-
-
-
-
-
-                        
-
-
-
-
-
-
-
-                        // echo "<pre>";
-                        // print_r();
-                        // die();
-
-                        // $down   =   array(
-                        //     'studentID' => $inv->studentID,
-                        //     'refrence_no' => $inv->refrence_no,
-                        //     'student_id' => $inv->student_id,
-                        //     'Accounts_Number' => $inv->accounts_reg,
-                        //     'Name' => $inv->srname,
-                        //     'GCUF' => $inv->registerNO,
-
-                        // );
-
-
-
                         $down   =   array(
+                            'studentID' => $inv->studentID,
+                            'refrence_no' => $inv->refrence_no,
+                            'student_id' => $inv->student_id,
+                            'Accounts_Number' => $inv->accounts_reg,
                             'Name' => $inv->srname,
-                            'father_name' => isset($parents[$inv->parentID]) ? $parents[$inv->parentID] : '',
-                            'cnic_no' => $inv->cnic,
-                            'registration_no' => $inv->registerNO,
-                            'roll_no' => $inv->roll,
-                            'class_id' => isset($classes[$inv->srclassesID]) ? $classes[$inv->srclassesID] : '',
-                            'section_id' => isset($sections[$inv->srsectionID]) ? $sections[$inv->srsectionID] : '',
-                            'semester_net_fee' => $inv->total_fee,
-                            'invoice_type' => $inv->maininvoice_type_v == 'invoice' ? 'Tuition Fee' : $inv->maininvoice_type_v,
-                            'opening_balance' => $balance1,
-                            'invoice' => $inv->maininvoicenet_fee,
-                            'student_discount' => $inv->discount,
-                            'weaver' => $weaver->weaver == '' ? 0 : $weaver->weaver,
-                            'other_charges' => 0,
-                            'invoice_discount' => $inv->maininvoice_discount,
-                            'total' => $inv->maininvoicetotal_fee,
-                            'total_discount' => $inv->maininvoice_discount,
-                            'net_total' => $inv->maininvoicenet_fee,
-                            'paid' => $total_paid,
-                            'balance' => $balance,
-                            'student_status' => isset($student_status[$inv->active]) ?$student_status[$inv->active] : ''
-                            
-                            // 'studentID' => $inv->studentID,
-                            // 'refrence_no' => $inv->refrence_no,
-                            // 'student_id' => $inv->student_id,
-                            // 'Accounts_Number' => $inv->accounts_reg,
-                            // 'GCUF' => $inv->registerNO,
+                            'GCUF' => $inv->registerNO,
+
                         );
-                        //isset($allpaymentbyinvoice[$inv->invoiceID]) ? $allpaymentbyinvoice[$inv->invoiceID] : 0,
-                        // echo "<pre>";
-                        // print_r($down);
-                        // die();
+
                         $i++;
                         $studentArray[$i]   =  $down;
-
-
-
                         $sr++;
                     }
-
-                    
-
 
                     helper_xlsx('invoice_number_report', $header, $studentArray);
                     
@@ -528,9 +394,9 @@ class Invoice extends Admin_Controller
             $classess   = $this->classes_m->get_classes();
             $classes    = pluck($classess, "obj", "classesID");
             $this->data["classes_pluck"] = $classes;
-
-            // $this->data['maininvoices'] = $this->maininvoice_m->get_maininvoice_with_studentrelation($schoolyearID);
             $this->data["grandtotalandpayment"] = $this->grandtotalandpaid($this->data["maininvoices"], $schoolyearID);
+            // $this->data['maininvoices'] = $this->maininvoice_m->get_maininvoice_with_studentrelation($schoolyearID);
+          
             $this->data["subview"] = "invoice/index";
             $this->load->view("_layout_main", $this->data);
         }
