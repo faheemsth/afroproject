@@ -5,7 +5,7 @@ class Productpurchase_m extends MY_Model {
     protected $_table_name = 'productpurchase';
     protected $_primary_key = 'productpurchaseID';
     protected $_primary_filter = 'intval';
-    protected $_order_by = "productpurchaseID desc";
+    protected $_order_by = "productpurchase.productpurchaseID desc";
 
     function __construct() {
         parent::__construct();
@@ -22,8 +22,14 @@ class Productpurchase_m extends MY_Model {
     }
 
     function get_order_by_productpurchase($array=NULL) {
-        $query = parent::get_order_by($array);
-        return $query;
+        $this->db->from($this->_table_name)
+        ->join('productpurchaseitem', 'productpurchaseitem.productpurchaseID ='.$this->_table_name.'.productpurchaseID')
+        ->join('product', 'product.productID = productpurchaseitem.productID')
+        ->join('productcategory', 'productcategory.productcategoryID = product.productcategoryID')
+        ->where($array)
+        ->order_by($this->_order_by);
+        $query = $this->db->get();
+        return $query->result();
     }
 
     function insert_productpurchase($array) {

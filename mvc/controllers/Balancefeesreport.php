@@ -366,9 +366,18 @@ class Balancefeesreport extends Admin_Controller
 					$sr 	=	1;
 					$i 		= 	0;
 					$studentArray 	=	[];
+					
+
+
 					foreach ($this->data['students'] as $student) {
 						$st_amount      =   0;
 						$st_discount    =   0;
+						$totalAmount1 = 0;
+						$totalDiscount1 = 0;
+						$totalPayments1 = 0;
+						$totalBalance1 = 0;
+						$typetotal = [];
+						
 						if (isset($totalAmountAndDiscount[$student->studentID]['total_paid'])) {
 							$total_paid     =   $totalAmountAndDiscount[$student->studentID]['total_paid'];
 						} else {
@@ -466,6 +475,9 @@ class Balancefeesreport extends Admin_Controller
 						$download_arr[] 			=	$down;
 						$sr++;
 					}
+					echo "<pre>";
+					print_r($studentArray);
+					die();
 					//error_reporting(E_ALL);
 
 

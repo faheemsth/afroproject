@@ -50,7 +50,7 @@ class Productpurchase extends Admin_Controller
         $schoolyearID = $this->session->userdata('defaultschoolyearID');
         $filter['productpurchase.schoolyearID'] = $schoolyearID;
 
-        if (isset($_GET)) {
+       // if (isset($_GET)) {
           
             if (isset($_GET['productcategoryID']) && !empty($_GET['productcategoryID'])) {
                 $this->data['productcategoryID'] = $_GET['productcategoryID'];
@@ -60,19 +60,19 @@ class Productpurchase extends Admin_Controller
             }
 
             if (isset($_GET['productNameSearch']) && !empty($_GET['productNameSearch'])) {
-                $this->data['productNameSearch'] = str_replace(' ', '', $_GET['productNameSearch']);
-                $filter['product.productname'] = str_replace(' ', '', $_GET['productNameSearch']);
+                $this->data['productNameSearch'] = str_replace(' ', ' ', $_GET['productNameSearch']);
+                $filter['product.productname'] = str_replace(' ', ' ', $_GET['productNameSearch']);
             } else {
                 $this->data["productNameSearch"]           = "";
             }
 
             if (isset($_GET['codeRefSearch']) && !empty($_GET['codeRefSearch'])) {
-                $this->data['codeRefSearch'] = str_replace(' ', '', $_GET['codeRefSearch']);
-                $filter['productpurchasereferenceno'] = str_replace(' ', '', $_GET['codeRefSearch']);
+                $this->data['codeRefSearch'] = str_replace(' ', ' ', $_GET['codeRefSearch']);
+                $filter['productpurchasereferenceno'] = str_replace(' ', ' ', $_GET['codeRefSearch']);
             } else {
                 $this->data["codeRefSearch"] = "";
             }
-        }
+        //}
 
 
 
@@ -81,7 +81,6 @@ class Productpurchase extends Admin_Controller
         $this->data['productpurchases'] = $this->productpurchase_m->get_order_by_productpurchase($filter);
         $this->data['grandtotalandpaid'] = $this->grandtotalandpaid($this->data['productpurchases'], $schoolyearID);
         $this->data['productcategorys'] = $this->productcategory_m->get_productcategory();
-
 
 
         $this->data["subview"] = "productpurchase/index";
