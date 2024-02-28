@@ -342,32 +342,62 @@ class Invoice extends Admin_Controller
                         $array
                     );
 
-                    $header = array(
-                        lang("studentID"),
-                        lang("student_id"),
-                        lang("refrence_no"),
-                        lang("Accounts_Number"),
-                        lang("Name"),
-                        lang("GCUF"),
-                    );
-                   
+
+                    $header = [
+                        'ID',
+                        'Invoice #',
+                        'Student ID',
+                        'Account Number',
+                        'GCUF',
+                        'Name',
+                        'Father Name',
+                        'Degree',
+                        'Semester',
+                        'Invoice Type',
+                        'Invoice Remarks',
+                        'Invoice Amount',
+                        'Invoice Status',
+                        'Invoice Date',
+                        'Created By'
+                    ];
+                    $classes = pluck($this->classes_m->general_get_classes(), 'classes', 'classesID');
+                    $sections = pluck($this->section_m->general_get_section(), 'section', 'sectionID');
+                    $parents = $parents = pluck($this->parents_m->get_parents(), 'name' ,'parentsID');
+
                     $download_arr   =   [];
                     $sr     =   1;
                     $i      =   0;
                     $studentArray   =   [];
                     foreach ($allinvoices as $inv) {
-                        $down   =   array(
+                        $status = '';
+                        if($inv->maininvoicestatus == 0){
+                            $status = 'Unpaid';
+                        }else if($inv->maininvoicestatus == 1){
+                            $status = 'Paid';
+                        }else if($inv->maininvoicestatus == 2){
+                            $status = 'Partially Paid';
+                        }
+
+                        $down = [
                             'studentID' => $inv->studentID,
-                            'refrence_no' => $inv->refrence_no,
+                            'invoice_no' =>  '#'.$inv->refrence_no,
                             'student_id' => $inv->student_id,
-                            'Accounts_Number' => $inv->accounts_reg,
-                            'Name' => $inv->srname,
-                            'GCUF' => $inv->registerNO,
+                            'account_number' => $inv->srroll,
+                            'gcuf' => $inv->srregisterNO,
+                            'name' => $inv->srname,
+                            'father_name' => $parents[$inv->parentID] ?? '',
+                            'classes' => $classes[$inv->classesID] ?? '',
+                            'section' => $sections[$inv->sectionID] ?? '',
+                            'type' => $inv->type_v == 'invoice' ? 'Tuition Fee' : '',
+                            'remarks' => $inv->remarks,
+                            'amount' => $inv->maininvoicenet_fee,
+                            'status' => $status ,
+                            'invoice_date' => $inv->date,
+                            'created_by' => $inv->maininvoiceuname
+                        ];
 
-                        );
-
-                        $i++;
                         $studentArray[$i]   =  $down;
+                        $i++;
                         $sr++;
                     }
 

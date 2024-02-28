@@ -123,6 +123,20 @@
                     <label>No. of Installments </label>
                     <input type="text" id="InstallmentsID" name="InstallmentsID" value="<?php echo set_value('InstallmentsID',$InstallmentsID);?>" class="form-control"/>
                 </div> 
+                
+                <div class="form-group col-sm-3">
+                    <label>View/Download</label>
+
+                    <?php
+                    $veiw_down = array(
+                        "view"       => 'View',
+                        "download"   => 'Download'
+                    );
+
+                    echo form_dropdown("veiw_down", $veiw_down, set_value("veiw_down"), "id='veiw_down' class='form-control select2'");
+                    ?>
+                </div>
+
 
                 <div class="col-sm-3">
                     <button type="submit" class="btn btn-success" style="margin-top:23px;">Search</button>
@@ -135,6 +149,7 @@
               
                 <div class="clearfix"></div>
 
+                
                 <?php if(customCompute($students) > 0 ) { ?>
                       <hr>
 
@@ -260,8 +275,6 @@
 
 <script type="text/javascript">
     $(".select2").select2();
-
-
 
     $(document).on('change', '#classesID', function() {
         $('#load_attendanceoverview_report').html('');

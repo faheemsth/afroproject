@@ -376,4 +376,22 @@ class student_m extends MY_Model {
 		$query = $this->db->query("SELECT * FROM $this->_table_name WHERE studentID = (SELECT MAX(studentID) FROM $this->_table_name)");
 		return $query->row();
 	}
+
+	public function semesterFees($classesID , $sectionID){
+		$this->db->select('s.classesID, s.sectionID, COUNT(s.studentID) AS total_students, 
+                   SUM(s.total_fee) AS total_fee, 
+                   SUM(s.discount) AS total_discount, 
+                   SUM(s.net_fee) AS total_net_fee');
+		$this->db->from('student s');
+		$this->db->where('s.active', 1);
+		$this->db->where('s.classesID', $classesID);
+		$this->db->where('s.sectionID', $sectionID);
+		// if(!empty($sectionIDs)){
+		// 	$this->db->where_in('s.sectionID', $sectionIDs);
+		// }
+		$this->db->group_by('s.classesID, s.sectionID');
+		$query = $this->db->get();
+		$result = $query->result();
+		return $result;
+	}
 }
