@@ -33,27 +33,27 @@ class Vendor extends Admin_Controller {
             array(
                 'field' => 'name',
                 'label' => $this->lang->line("vendor_name"),
-                'rules' => 'trim|required|xss_clean|max_length[128]'
+                'rules' => 'trim|required|xss_clean'
             ),
             array(
                 'field' => 'email',
                 'label' => $this->lang->line("vendor_email"),
-                'rules' => 'trim|max_length[40]|valid_email|xss_clean|callback_unique_email'
+                'rules' => 'trim|xss_clean'
             ),
             array(
                 'field' => 'phone',
                 'label' => $this->lang->line("vendor_phone"),
-                'rules' => 'trim|xss_clean|max_length[25]'
+                'rules' => 'trim|xss_clean'
             ),
             array(
                 'field' => 'contact_name',
                 'label' => $this->lang->line("vendor_contact_name"),
-                'rules' => 'trim|xss_clean|max_length[40]'
+                'rules' => 'trim|xss_clean'
             ),
             array(
                 'field' => 'tax_rate',
                 'label' => 'Tax Rate',
-                'rules' => 'trim|required|xss_clean|max_length[40]'
+                'rules' => 'trim|required|xss_clean'
             )
         );
         return $rules;

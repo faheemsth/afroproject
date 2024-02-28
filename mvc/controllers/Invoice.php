@@ -3275,6 +3275,12 @@ class Invoice extends Admin_Controller
 
     public function saveinvoice()
     {
+
+        // echo "<pre>";
+        // print_r($_POST);
+        // die();
+
+    
         error_reporting(0);
         $maininvoiceID = 0;
         $retArray["status"] = false;
@@ -3320,6 +3326,10 @@ class Invoice extends Admin_Controller
                         $last_date          = $this->input->post("last_date_enrollment");
                         $remarks            = $this->input->post("remarks");
                         $file_path         =  '';
+
+                        $installment = $this->input->post('installment');
+                        $installment_deadline = $this->input->post('installment_deadline');
+
                         // var_dump($_POST);
                         // var_dump($_FILES);
 
@@ -3539,6 +3549,8 @@ class Invoice extends Admin_Controller
 
                                 }
 
+                                
+
 
 
 
@@ -3556,6 +3568,7 @@ class Invoice extends Admin_Controller
                                     } else {
                                         $instcounter = 1;
                                     }
+                                    
                                     $data_counter = 0;
                                     for ($y = 1; $y <= $instcounter; $y++) {
                                         if ($data_counter == 0) {
@@ -3750,6 +3763,74 @@ class Invoice extends Admin_Controller
                                                     $total_fee  = $this->input->post("amount");
                                                     $net_fee    = $this->input->post("amount");
                                                 }
+                                            } elseif($feess_type == 20){ //late fee with installments
+                                                
+                                                $net_fee = 0;
+
+                                                
+                                                //check student current installment is present in the invoice table
+                                                $invoice_filter = [
+                                                    'studentID' => $getstudent->studentID,
+                                                    'classesID' => $getstudent->classesID,
+                                                    'sectionID' => $getstudent->sectionID,
+                                                    'type_v' => 'invoice'
+                                                ];
+
+
+
+                                                $student_invoices = $this->invoice_m->get_order_by_invoice($invoice_filter);
+                                                $is_student_fine = false;
+
+
+                                                // echo "<pre>";
+                                                // print_r($student_invoices);
+                                                // die();
+
+                                                // if invoice is present then check that wether the invoice is paid or not 
+                                                foreach($student_invoices as $key => $s_inv){
+                                                    
+                                                    if(($key + 1) > $installment){
+                                                        break;
+                                                    }
+
+                                                    $invoice_p = [
+                                                        'studentID' => $s_inv->studentID,
+                                                        'invoiceID' => $s_inv->invoiceID
+                                                    ];
+
+                                                    $payments = $this->payment_m->get_orderr_by_payment($invoice_p);
+                                                    
+                                                    //if not payment then break the loop and fine the student
+                                                    if(!$payments){
+                                                        $is_student_fine = true;
+                                                        break;
+                                                    }
+                                                    
+
+                                                    foreach($payments as $key => $payment){
+                                                        //if found payment, check the payment date is greater than the mentioned deadline in the form, student will be fine
+                                                        if(strtotime($payment->paymentdate) >= strtotime($installment_deadline)){
+                                                            $is_student_fine = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                    
+
+                                                    if($is_student_fine){
+                                                        break;
+                                                    } 
+                                                }
+
+                                                
+                                               
+
+                                                // if is_student_fine true, student should be fine else. go back to another student
+                                                if($is_student_fine){
+                                                    $total_fee  = $this->input->post("amount");
+                                                    $net_fee    = $this->input->post("amount");
+                                                }
+                                                
+                                                
                                             } else {
                                                 //$getstudents = $this->studentrelation_m->get_order_by_student($studentArrays);
 
@@ -3775,6 +3856,7 @@ class Invoice extends Admin_Controller
 
                                             $fee_breakup    =   serialize($breakup_info_ar);
                                         }
+
 
 
                                         if ($net_fee) {
@@ -3811,10 +3893,16 @@ class Invoice extends Admin_Controller
                                             $data_counter++;
                                         } // net fee
                                     } // for increment
-
+                                    
                                     $studentArray[] = $getstudent->srstudentID;
                                     $reg_no[$getstudent->srstudentID] = $getstudent->accounts_reg;
                                 }
+
+                                // echo "<pre>";
+                                // print_r($invoiceMainArray);
+                                // die();
+
+                                // die('student out');
 
                                 if (customCompute($invoiceMainArray)) {
                                     $count = customCompute($invoiceMainArray);

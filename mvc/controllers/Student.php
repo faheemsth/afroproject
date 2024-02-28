@@ -100,7 +100,7 @@ class Student extends Admin_Controller
 				// $studentInfo->balance;
 				//var_dump( $studentInfo->fee_structureID);
 				
-
+				
 				$this->pluckInfo();
 				$this->basicInfo($studentInfo);
 				$this->parentInfo($studentInfo);
@@ -110,6 +110,7 @@ class Student extends Admin_Controller
 				$this->invoiceInfo($studentInfo);
 				$this->paymentInfo($studentInfo);
 				$this->documentInfo($studentInfo);
+
 
 				if (customCompute($studentInfo)) {
 					$this->data['set']     = $url;

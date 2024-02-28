@@ -67,27 +67,27 @@ class Productsupplier extends Admin_Controller {
             array(
                 'field' => 'productsuppliercompanyname',
                 'label' => $this->lang->line("productsupplier_companyname"),
-                'rules' => 'trim|required|xss_clean|max_length[128]|callback_unique_companyname'
+                'rules' => 'trim|required|xss_clean|callback_unique_companyname'
             ),
             array(
                 'field' => 'productsuppliername',
                 'label' => $this->lang->line("productsupplier_suppliername"),
-                'rules' => 'trim|required|xss_clean|max_length[40]'
+                'rules' => 'trim|required|xss_clean'
             ),
             array(
                 'field' => 'productsupplieremail',
                 'label' => $this->lang->line("productsupplier_email"),
-                'rules' => 'trim|xss_clean|max_length[40]|valid_email'
+                'rules' => 'trim|xss_clean'
             ),
             array(
                 'field' => 'productsupplierphone',
                 'label' => $this->lang->line("productsupplier_phone"),
-                'rules' => 'trim|xss_clean|max_length[25]|min_length[5]'
+                'rules' => 'trim|xss_clean'
             ),
             array(
                 'field' => 'productsupplieraddress',
                 'label' => $this->lang->line("productsupplier_address"),
-                'rules' => 'trim|xss_clean|max_length[128]'
+                'rules' => 'trim|xss_clean'
             )
         );
         return $rules;
