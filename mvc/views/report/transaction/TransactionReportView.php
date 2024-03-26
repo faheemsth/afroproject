@@ -65,7 +65,7 @@
         autoclose: true,
         format: 'dd-mm-yyyy',
         startDate:'<?=$schoolyearsessionobj->startingdate?>',
-        endDate:'<?=$schoolyearsessionobj->endingdate?>',
+        //endDate:'<?=$schoolyearsessionobj->endingdate?>',
     });
 
     $(document).bind('click', '#fromdate, #todate', function() {

@@ -111,9 +111,15 @@ class Transactionreport extends Admin_Controller {
 		if(permissionChecker('transactionreport')) {
 			if($_POST) {
 				$rules = $this->rules();
+
+				
+
 				$this->form_validation->set_rules($rules);
 				if ($this->form_validation->run() == FALSE) {
 					$retArray = $this->form_validation->error_array();
+					echo '<pre>';
+					print_r($retArray);
+					die();
 				    $retArray['status'] = FALSE;
 				    echo json_encode($retArray);
 				    exit;
@@ -121,7 +127,7 @@ class Transactionreport extends Admin_Controller {
 					$this->data['fromdate'] = $this->input->post('fromdate');
 					$this->data['todate'] = $this->input->post('todate');
 					$schoolyearID = $this->session->userdata('defaultschoolyearID');
-
+					
 					$this->data['students'] = pluck($this->studentrelation_m->get_order_by_studentrelation(array('srschoolyearID'=>$schoolyearID)),'obj','srstudentID');
 					$this->data['classes'] = pluck($this->classes_m->general_get_classes(),'classes','classesID');
 					$this->data['sections'] = pluck($this->section_m->general_get_section(),'section','sectionID');
