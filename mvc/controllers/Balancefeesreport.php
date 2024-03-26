@@ -207,8 +207,6 @@ class Balancefeesreport extends Admin_Controller
 				$_POST =	$_GET;
 			}
 
-
-
 			if ($_POST) {
 				$schoolyearID 			= $this->session->userdata('defaultschoolyearID');
 				$_POST['schoolyearID'] 	= $schoolyearID;
@@ -284,6 +282,7 @@ class Balancefeesreport extends Admin_Controller
 
 				$start_date     =  $this->input->post('start_date');
 				$end_date       =  $this->input->post('end_date');
+				$this->data['date_type'] = $date_type;
 				if ($date_type != "") {
 					if ($date_type == "maininvoicedate") {
 						$inv_array["date >="] = date("Y-m-d", strtotime($start_date));
@@ -300,29 +299,30 @@ class Balancefeesreport extends Admin_Controller
 						$inv_array["paymentdate <="] = date("Y-m-d", strtotime($end_date));
 						$inv_array1["paymentdate <"] = date("Y-m-d", strtotime($start_date));
 					}
+
+					if($date_type == '0'){
+						$inv_array["date >="] = date("Y-m-d", strtotime($start_date));
+						$inv_array["date <="] = date("Y-m-d", strtotime($end_date));
+						$inv_array1["date <"] = date("Y-m-d", strtotime($start_date));
+					}
 				}
 
 				
-				// echo '<pre>';
-				// print_r($inv_array);
-				// echo "<br>--------------<br>";
-				// print_r($inv_array1);
-				// die();
-
-				//echo date('d-m-Y H:i:s A');
-				//echo "<br> invoice<br>";
 				$this->data['invoice_test'] 			= $this->invoice_m->get_invoice_by_array_where_in($inv_array);	
+				//opening balance
 				$this->data['invoice_test1'] 			= $this->invoice_m->get_invoice_by_array_where_in($inv_array1);
-				//echo $this->db->last_query();
-
-				//echo $this->db->last_query();
-				//echo date('d-m-Y H:i:s A');
-				//echo "<br> invoice close<br>";
-				//exit();
+				
+				// echo '<pre>';
+				// print_r($this->data['invoice_test1']);
+				// die();
 
 				$this->data['totalAmountAndDiscount'] 	= $this->totalAmountAndDiscustomCompute($this->data['invoice_test'], $inv_array["maininvoice_type_v"]);
 				$this->data['totalAmountAndDiscount1'] 	= $this->totalAmountAndDiscustomCompute($this->data['invoice_test1'], $inv_array["maininvoice_type_v"]);
 				$parents = pluck($this->parents_m->get_parents(), 'name' ,'parentsID');
+
+				// echo '<pre>';
+				// print_r($this->data['totalAmountAndDiscount']);
+				// die();
 
 				if ($rendertype == "download") {
 					//$this->load->helper('file');
@@ -333,6 +333,10 @@ class Balancefeesreport extends Admin_Controller
 					$totalAmountAndDiscount1 	=	$this->data['totalAmountAndDiscount1'];
 					$ivoicetypes    =   get_general_feetype();
 					$student_status = get_student_status_type(); 
+
+					// echo '<pre>';
+					// print_r($totalAmountAndDiscount);
+					// die();
 
 					$header = array(
 						lang("Sr"),
@@ -346,20 +350,26 @@ class Balancefeesreport extends Admin_Controller
 						"Type Of Fee",
 						"Semester Net Fee",
 						lang("Opening_Balance"),
+						// "Invoice",
+						// "Discount"
 					);
 					foreach ($inv_array["maininvoice_type_v"] as $key) {
 						$header[]	=	lang($ivoicetypes[$key]);
-						$header[]	=	"Invoice Discount";
+						$header[]	=	$ivoicetypes[$key]." Discount";
 					}
 					$header[] = "Weaver/Adjustment";
-					$header[] = "Other Charge";
-					$header[] = "Student Discount";
+					//$header[] = "Other Charge";
+					//$header[] = "Student Discount";
 					$header[]	=	lang("Total");
 					$header[]	=	lang("Total_Discount");
 					$header[]	=	lang("Net_Total");				
 					$header[]	=	lang("Paid");
 					$header[]	=	lang("Balance");
 					$header[] = "Student status";
+
+					// echo "<pre>";
+					// print_r($header);
+					// die();
 
 
 					$download_arr 	=	[];
@@ -386,14 +396,14 @@ class Balancefeesreport extends Admin_Controller
 						$down 	=	array(
 							'Sr' => $sr,
 							'Name' => $student->name,
-							 
 							'father_name' => isset($parents[$student->parentID]) ? $parents[$student->parentID] : '',
                             'cnic_no' => $student->cnic,
                             'registration_no' => $student->registerNO,
                             'roll_no' => $student->roll,
                             'class_id' => isset($classes[$student->classesID]) ? $classes[$student->classesID] : '',
                             'section_id' => isset($sections[$student->sectionID]) ? $sections[$student->sectionID] : '',
-							'Type' => (isset($totalAmountAndDiscount[$student->studentID]['feetype']) ? $totalAmountAndDiscount[$student->studentID]['feetype'] : 'None'),
+							//'Type' => (isset($totalAmountAndDiscount[$student->studentID]['feetype']) ? $totalAmountAndDiscount[$student->studentID]['feetype'] : 'None'),
+							'Type' => implode(', ', $maininvoice_type_v),
 							'semester_net_fee' => $student->total_fee,
 						);
 
@@ -404,10 +414,9 @@ class Balancefeesreport extends Admin_Controller
 						} else {
 							$total_paid1     =   0;
 						}
-						foreach ($maininvoice_type_v as $invtype) {
 
-
-
+						
+						foreach ($maininvoice_type_v as $key => $invtype) {
 							if (isset($totalAmountAndDiscount1[$student->studentID]['type_amount'][$invtype])) {
 								$st_amount1    += $totalAmountAndDiscount1[$student->studentID]['type_amount'][$invtype];
 								$typetotal[$invtype]['total']   += $totalAmountAndDiscount1[$student->studentID]['type_amount'][$invtype];
@@ -417,6 +426,8 @@ class Balancefeesreport extends Admin_Controller
 								$typetotal[$invtype]['totaliscount']    += $totalAmountAndDiscount1[$student->studentID]['type_discount'][$invtype];
 							}
 						}
+
+
 						$net_amount1 = $st_amount1 - $st_discount1;
 
 
@@ -427,7 +438,7 @@ class Balancefeesreport extends Admin_Controller
 						$balance1        =  $net_amount1 - $total_paid1;
 						$totalBalance1   += $balance1;
 
-						$down['Opening_Balance'] 				= $balance1;
+						$down['Opening_Balance'] = $balance1 > 0 ? floor($balance1) : 0;
 						$st_amount      =   0;
 						$st_discount    =   0;
 						if (isset($totalAmountAndDiscount[$student->studentID]['total_paid'])) {
@@ -436,27 +447,38 @@ class Balancefeesreport extends Admin_Controller
 							$total_paid     =   0;
 						}
 
-						foreach ($maininvoice_type_v as $invtype) {
+						// echo "<pre>";
+						// print_r($totalAmountAndDiscount);
+						// die();
 
+						foreach ($maininvoice_type_v as $key => $invtype) {
 							$down[$invtype] 	= 	(isset($totalAmountAndDiscount[$student->studentID]['type_amount'][$invtype]) ? ceil($totalAmountAndDiscount[$student->studentID]['type_amount'][$invtype]) : 0);
-							$down['discount'] 	= 	(isset($totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype]) ? ceil($totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype]) : 0);
-
+							$down[$invtype.'discount'] 	= 	(isset($totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype]) ? ceil($totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype]) : 0);
+							//$inv 	+= 	(isset($totalAmountAndDiscount[$student->studentID]['type_amount'][$invtype]) ? ceil($totalAmountAndDiscount[$student->studentID]['type_amount'][$invtype]) : 0);
+							//$dis 	+= 	(isset($totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype]) ? ceil($totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype]) : 0);
 
 							if (isset($totalAmountAndDiscount[$student->studentID]['type_amount'][$invtype])) {
 								$st_amount    += $totalAmountAndDiscount[$student->studentID]['type_amount'][$invtype];
 								$typetotal[$invtype]['total']   += $totalAmountAndDiscount[$student->studentID]['type_amount'][$invtype];
 							}
+
 							if (isset($totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype])) {
 								$st_discount    += $totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype];
 								$typetotal[$invtype]['totaliscount']    += $totalAmountAndDiscount[$student->studentID]['type_discount'][$invtype];
 							}
 						}
+
+						// if($student->studentID == 1774){
+						// 	echo "<pre>";
+						// 	print_r($down);
+						// 	die();
+						// }
+
+						//$down['invoice'] = $inv;
+						//$down['discount'] = $dis;
+						//$down['other_charges'] = $student->other_charges;
+						//$down['student_discounts'] = $student->discount;
 						$down['weaver'] = 0;
-						$down['other_charges'] = $student->other_charges;
-						$down['student_discount'] = $student->discount;
-
-
-
 						$down['Total'] 				= 	$st_amount;
 						$down['Total_Discount'] 	= 	$st_discount;
 						$net_amount 				= 	$st_amount - $st_discount;
@@ -468,10 +490,6 @@ class Balancefeesreport extends Admin_Controller
 						$down['student_status'] = isset($student_status[$student->active]) ?$student_status[$student->active] : '';
 						$i++;
 						$studentArray[$i]   =  $down;
-
-
-
-
 						$download_arr[] 			=	$down;
 						$sr++;
 					}
@@ -479,7 +497,9 @@ class Balancefeesreport extends Admin_Controller
 					print_r($studentArray);
 					die();
 					//error_reporting(E_ALL);
-
+					// echo "<pre>";
+					// print_r($studentArray);
+					// die();
 
 					$file_name 	= lang("Balance_Fee_Report_") . date('d-m-Y H i A') . '.csv';
 

@@ -109,4 +109,17 @@ class Section_m extends MY_Model {
 	public function delete_section($id){
 		parent::delete($id);
 	}
+
+	public function get_section_by_numeric_code($classID, $numeric_codes = []){
+		$this->db->select('*');
+		$this->db->from('section');
+		$this->db->where('classesID', $classID);
+		if(!empty($numeric_codes)){
+			$this->db->where_in('numric_code', $numeric_codes);
+		}
+		$query = $this->db->get();
+		$result = $query->result();
+		return $result;
+	}
 }
+

@@ -588,7 +588,50 @@ public function get_invoice_or_where_by_array($where=NULL,$or_where=NULL){
 	
 
 	public function get_invoice_by_array_where_in($queryArray) {
-		$this->db->select('invoice.studentID,amount,discount,type_v,feetype, SUM(payment.paymentamount) as total_paid, invoice.invoiceID as invoiceID ');
+		// $this->db->select('invoice.studentID,amount,discount,type_v,feetype, SUM(payment.paymentamount) as total_paid, invoice.invoiceID as invoiceID ');
+		// $this->db->from('invoice');
+
+		// $this->db->join('payment','invoice.invoiceID=payment.invoiceID','LEFT');
+		// if(isset($queryArray['maininvoice_type_v']) && $queryArray['maininvoice_type_v'] != '') {
+		// 	$this->db->where_in('invoice.type_v', $queryArray['maininvoice_type_v']);
+		// 	unset($queryArray['maininvoice_type_v']);
+		// }
+
+		// if(isset($queryArray['sectionID']) && gettype($queryArray['sectionID']) == 'array'){
+		// 	$this->db->where_in('invoice.sectionID', $queryArray['sectionID']);
+		// 	unset($queryArray['sectionID']);
+		// }
+
+		// $this->db->where($queryArray);
+		// $this->db->group_by('invoice.invoiceID');
+		// $query = $this->db->get();
+		// return $query->result();
+
+
+		$this->db->select('invoice.studentID, amount, discount, type_v, feetype, COALESCE(SUM(payment.paymentamount), 0) as total_paid, invoice.invoiceID as invoiceID');
+		$this->db->from('invoice');
+		$this->db->join('(SELECT invoiceID, SUM(paymentamount) as paymentamount FROM payment GROUP BY invoiceID) payment', 'invoice.invoiceID = payment.invoiceID', 'LEFT');
+
+		if (isset($queryArray['maininvoice_type_v']) && $queryArray['maininvoice_type_v'] != '') {
+			$this->db->where_in('invoice.type_v', $queryArray['maininvoice_type_v']);
+			unset($queryArray['maininvoice_type_v']);
+		}
+
+		if (isset($queryArray['sectionID']) && is_array($queryArray['sectionID'])) {
+			$this->db->where_in('invoice.sectionID', $queryArray['sectionID']);
+			unset($queryArray['sectionID']);
+		}
+
+		$this->db->where($queryArray);
+		$this->db->group_by('invoice.invoiceID');
+
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+
+	public function get_invoice_by_array_for_receiving_where_in($queryArray) {
+		$this->db->select('invoice.classesID, invoice.sectionID, sum(amount) as amount ,sum(discount) as discount, type_v, SUM(payment.paymentamount) as total_paid');
 		$this->db->from('invoice');
 
 		$this->db->join('payment','invoice.invoiceID=payment.invoiceID','LEFT');
@@ -596,8 +639,14 @@ public function get_invoice_or_where_by_array($where=NULL,$or_where=NULL){
 			$this->db->where_in('invoice.type_v', $queryArray['maininvoice_type_v']);
 			unset($queryArray['maininvoice_type_v']);
 		}
+
+		if(isset($queryArray['sectionID']) && gettype($queryArray['sectionID']) == 'array'){
+			$this->db->where_in('invoice.sectionID', $queryArray['sectionID']);
+			unset($queryArray['sectionID']);
+		}
+
 		$this->db->where($queryArray);
-		$this->db->group_by('invoice.invoiceID');
+		$this->db->group_by('invoice.sectionID');
 		$query = $this->db->get();
 		return $query->result();
 	}

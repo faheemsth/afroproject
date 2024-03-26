@@ -1048,12 +1048,45 @@ class Student extends Admin_Controller
 		}
 
 
+		if(isset($_GET['veiw_down']) && $_GET['veiw_down'] == "download"){
+			$header = [
+				'Name',
+				'Address',
+				'Degree',
+				'Semester',
+				'Roll',
+				'Registration No.',
+				'Status'
+			];
 
+			$statuses = get_student_status_type();
 
+			if(customCompute($this->data['students']) > 0 ) {
+				// echo "<pre>";
+				// print_r($this->data["pluck_section"]);
+				// die();
+				$count = 1;
+				foreach($this->data['students'] as $student){
+					$download[] = [
+						'name' =>  $student->srname,
+						'address' => $student->address,
+						'degree' => $this->data["pluck_classes"][$student->classesID]->classes,
+						'section' => $this->data["pluck_section"][$student->sectionID]->section,
+						'roll' => $student->srroll,
+						'reg' => $student->srregisterNO,
+						'status' => $statuses[$student->active]
+					];
+				}
+				// echo '<pre>';
+				// print_r($download);
+				// die();
 
-
-		$this->data["subview"] = "student/search";
-		$this->load->view('_layout_main', $this->data);
+				helper_xlsx('Search Students', $header, $download);
+			}
+		}else{
+			$this->data["subview"] = "student/search";
+			$this->load->view('_layout_main', $this->data);
+		}
 	}
 
 

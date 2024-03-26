@@ -1757,8 +1757,8 @@ function dd($dbs){
             $row  = 2;
             if(customCompute($data)) {
                 foreach($data as $studentArray) {
-                   // var_dump($studentArray);
-                   // exit();
+                //    var_dump($studentArray);
+                //    exit();
                     $column = "A";
                     foreach($studentArray as $value) {
                         $sheet->setCellValue($column.$row,$value);
@@ -1781,9 +1781,8 @@ function dd($dbs){
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
             header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
             header('Pragma: public'); // HTTP/1.0
-
-            $CI->phpspreadsheet->output($CI->phpspreadsheet->spreadsheet);
-         
+           
+            $CI->phpspreadsheet->output($CI->phpspreadsheet->spreadsheet);         
     }
  
 
